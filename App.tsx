@@ -1,12 +1,29 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import CustomButton from './components/Button';
 import { Stack } from '@rneui/layout';
-import { View, ImageBackground, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, ImageBackground, StyleSheet, TouchableHighlight, Alert } from 'react-native';
 import { Text, Card, Image } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import PhoneInput, {
+  ICountry,
+  IPhoneInputRef,
+} from 'react-native-international-phone-number';
+import RegisterPage from './screens/RegisterPage';
+
 
 const App = () => {
 
+  const phoneInputRef = useRef<IPhoneInputRef>(null);
+
+  function onSubmit() {
+    Alert.alert(
+      'Intermediate Result',
+      `Country: ${phoneInputRef.current?.selectedCountry?.name?.en}
+       Phone Number: ${phoneInputRef.current?.fullPhoneNumber}
+       isValid: ${phoneInputRef.current?.isValid}`
+    );
+  }
+  
 
   return (
   <View style={styles.container}>
@@ -23,6 +40,9 @@ const App = () => {
             <Text style={{ fontFamily: 'RethinkSans-Regular', marginTop: 20, paddingLeft: 20 }}>
               Enter your Phone Number to Continue
             </Text>
+            <View>
+              <PhoneInput ref={phoneInputRef} defaultCountry='IN'/>
+            </View>
 
             <View style={{ width: '100%', paddingTop: 10, alignItems: 'center' }}>
               <Stack row spacing={20} style={{ paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}>
@@ -32,6 +52,7 @@ const App = () => {
                   backgroundColor="#FAB12F"
                   titleStyle={{ fontFamily: 'RethinkSans-ExtraBold', fontSize: 16, }}
                   buttonStyle={styles.buttons}
+                  onPress={onSubmit}
                 />
                 <CustomButton
                   title="Register"

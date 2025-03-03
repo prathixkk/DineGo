@@ -11,6 +11,12 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A5A1B6237A444D4B98C84C50 /* RethinkSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ED1ADABFF9CB4F9EAD79BC9B /* RethinkSans-Bold.ttf */; };
+		64F6BF269A8B4A9986CF68CD /* RethinkSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 94DEEFF677114CBA96D0387B /* RethinkSans-ExtraBold.ttf */; };
+		FADCEEA16C564C0BAC682F5E /* RethinkSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A49757CE2D84994A708424D /* RethinkSans-Medium.ttf */; };
+		B4DCB3F5A57D49B3AD285409 /* RethinkSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 010A7AF2B733435291CE2131 /* RethinkSans-Regular.ttf */; };
+		289DC441294040B89DE4ECF9 /* RethinkSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 038B7523030E4DBCB6438FCB /* RethinkSans-SemiBold.ttf */; };
+		6BCD3BCF336B4D23928C1465 /* Righteous-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A60B1D33EA334EA2AF27E806 /* Righteous-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +41,12 @@
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = dinegoone/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = dinegoone/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		ED1ADABFF9CB4F9EAD79BC9B /* RethinkSans-Bold.ttf */ = {isa = PBXFileReference; name = "RethinkSans-Bold.ttf"; path = "../assets/fonts/RethinkSans-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		94DEEFF677114CBA96D0387B /* RethinkSans-ExtraBold.ttf */ = {isa = PBXFileReference; name = "RethinkSans-ExtraBold.ttf"; path = "../assets/fonts/RethinkSans-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0A49757CE2D84994A708424D /* RethinkSans-Medium.ttf */ = {isa = PBXFileReference; name = "RethinkSans-Medium.ttf"; path = "../assets/fonts/RethinkSans-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		010A7AF2B733435291CE2131 /* RethinkSans-Regular.ttf */ = {isa = PBXFileReference; name = "RethinkSans-Regular.ttf"; path = "../assets/fonts/RethinkSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		038B7523030E4DBCB6438FCB /* RethinkSans-SemiBold.ttf */ = {isa = PBXFileReference; name = "RethinkSans-SemiBold.ttf"; path = "../assets/fonts/RethinkSans-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A60B1D33EA334EA2AF27E806 /* Righteous-Regular.ttf */ = {isa = PBXFileReference; name = "Righteous-Regular.ttf"; path = "../assets/fonts/Righteous-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +105,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				5823EF8BAE9D4875A22F8399 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -115,6 +128,20 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		5823EF8BAE9D4875A22F8399 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				ED1ADABFF9CB4F9EAD79BC9B /* RethinkSans-Bold.ttf */,
+				94DEEFF677114CBA96D0387B /* RethinkSans-ExtraBold.ttf */,
+				0A49757CE2D84994A708424D /* RethinkSans-Medium.ttf */,
+				010A7AF2B733435291CE2131 /* RethinkSans-Regular.ttf */,
+				038B7523030E4DBCB6438FCB /* RethinkSans-SemiBold.ttf */,
+				A60B1D33EA334EA2AF27E806 /* Righteous-Regular.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -185,6 +212,12 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				A5A1B6237A444D4B98C84C50 /* RethinkSans-Bold.ttf in Resources */,
+				64F6BF269A8B4A9986CF68CD /* RethinkSans-ExtraBold.ttf in Resources */,
+				FADCEEA16C564C0BAC682F5E /* RethinkSans-Medium.ttf in Resources */,
+				B4DCB3F5A57D49B3AD285409 /* RethinkSans-Regular.ttf in Resources */,
+				289DC441294040B89DE4ECF9 /* RethinkSans-SemiBold.ttf in Resources */,
+				6BCD3BCF336B4D23928C1465 /* Righteous-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

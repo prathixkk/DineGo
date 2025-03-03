@@ -17,8 +17,10 @@
     "@rneui/themed": "^4.0.0-rc.8",
     "react": "19.0.0",
     "react-native": "0.78.0",
+    "react-native-international-phone-number": "^0.9.1",
     "react-native-paper-phone-number-input": "^1.3.1",
-    "react-native-safe-area-context": "^5.2.0"
+    "react-native-safe-area-context": "^5.2.0",
+    "react-native-vector-icons": "^10.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

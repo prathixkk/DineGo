@@ -1,0 +1,29 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/RethinkSans-Bold.ttf",
+      "sha1": "08308c354bb92d1eaf7ee7028413f5ea2632f504"
+    },
+    {
+      "path": "assets/fonts/RethinkSans-ExtraBold.ttf",
+      "sha1": "3af32109d654b6b48c65363e1a7ec8dc65ee75f4"
+    },
+    {
+      "path": "assets/fonts/RethinkSans-Medium.ttf",
+      "sha1": "6f8e7bb9cd8e60505b5a5789e7d72328f1b6e4b9"
+    },
+    {
+      "path": "assets/fonts/RethinkSans-Regular.ttf",
+      "sha1": "414c377a44cbc61164c954a42f0ae51c7897e691"
+    },
+    {
+      "path": "assets/fonts/RethinkSans-SemiBold.ttf",
+      "sha1": "05c2a407572a4881ffe1c90a487cab9f16760b4f"
+    },
+    {
+      "path": "assets/fonts/Righteous-Regular.ttf",
+      "sha1": "3129e2b47e224dec082c4169b396b1fa27a95749"
+    }
+  ]
+}
