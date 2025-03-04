@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import CustomButton from './components/Button';
+import CustomButton from '../components/Button';
 import { Stack } from '@rneui/layout';
 import { View, ImageBackground, StyleSheet, TouchableHighlight, Alert } from 'react-native';
 import { Text, Card, Image } from '@rneui/themed';
@@ -8,12 +8,16 @@ import PhoneInput, {
   ICountry,
   IPhoneInputRef,
 } from 'react-native-international-phone-number';
-import RegisterPage from './screens/RegisterPage';
+import RegisterPage from '../screens/RegisterPage';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { ParamListBase } from '@react-navigation/native';
 
-
-const App = () => {
+const LoginPage = () => {
 
   const phoneInputRef = useRef<IPhoneInputRef>(null);
+
+  const NStack = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   function onSubmit() {
     Alert.alert(
@@ -23,13 +27,12 @@ const App = () => {
        isValid: ${phoneInputRef.current?.isValid}`
     );
   }
-  
 
   return (
   <View style={styles.container}>
-      <ImageBackground source={require('./assets/images/paneer.jpg')} style={styles.background}>
+      <ImageBackground source={require('../assets/images/paneer.jpg')} style={styles.background}>
         <View style={styles.logoContainer}>
-          <Image source={require('./assets/images/Logo.png')} style={styles.logo} />
+          <Image source={require('../assets/images/Logo.png')} style={styles.logo} />
         </View>
 
         <View>
@@ -60,6 +63,7 @@ const App = () => {
                   backgroundColor="#FAB12F"
                   titleStyle={{ fontFamily: 'RethinkSans-ExtraBold', fontSize: 16 }}
                   buttonStyle={styles.buttons}
+                  onPress={()=>NStack.navigate('Register')}
                 />
               </Stack>
             </View>
@@ -148,4 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default LoginPage;
