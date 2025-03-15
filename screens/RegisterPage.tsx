@@ -2,35 +2,40 @@ import React, { useRef } from 'react';
 import CustomButton from '../components/Button';
 import { Stack } from '@rneui/layout';
 import { View, ImageBackground, StyleSheet, TouchableHighlight, Alert } from 'react-native';
-import { Text, Card, Image } from '@rneui/themed';
+import { Text, Card, Image, Input } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Button } from '@rneui/base';
+import BackButton from '../components/BackButton';
 
 const RegisterPage = () => {
   return (
     <View style={styles.container}>
         <ImageBackground source={require('../assets/images/paneer.jpg')} style={styles.background}>
+        <View style={{position:'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-start', alignItems: 'flex-start', padding: 20}}>
+         <BackButton/>
+        </View>
           <View style={styles.logoContainer}>
             <Image source={require('../assets/images/Logo.png')} style={styles.logo} />
           </View>
+          
   
           <View>
             <Card containerStyle={styles.card}>
               <Card.Title>
-                <Text style={{ fontFamily: 'Righteous-Regular', fontSize: 32, color:'#FAB12F' }}>Login</Text>
+                <Text style={{ fontFamily: 'Righteous-Regular', fontSize: 32, color:'#FAB12F' }}>Register</Text>
               </Card.Title>
-              <Text style={{ fontFamily: 'RethinkSans-Regular', marginTop: 20, paddingLeft: 20 }}>
-                Enter your Phone Number to Continue
-              </Text>
-  
+
+              <View>
+                <Input placeholder="Name" keyboardType="default" />
+                <Input placeholder="Phone Number" keyboardType="phone-pad" />
+                <Input placeholder="Email" keyboardType="email-address" />
+                <Input placeholder="Password" keyboardType="default" />
+                <Input placeholder="Confirm Password" keyboardType="default" />
+              </View>
+
               <View style={{ width: '100%', paddingTop: 10, alignItems: 'center' }}>
-                <Stack row spacing={20} style={{ paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}>
-                  <CustomButton 
-                    title="Login"
-                    textColor="#FFFFFF"
-                    backgroundColor="#FAB12F"
-                    titleStyle={{ fontFamily: 'RethinkSans-ExtraBold', fontSize: 16, }}
-                    buttonStyle={styles.buttons}
-                  />
+                <Stack  style={{ paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}>
+                  
                   <CustomButton
                     title="Register"
                     textColor="#FFFFFF"
@@ -41,16 +46,6 @@ const RegisterPage = () => {
                   />
                 </Stack>
               </View>
-  
-              <Card.Divider style={{ paddingTop: 30 }} /> 
-              <CustomButton
-                icon={<Icon name="home" size={100}  />}
-                title="Sign In With Google"
-                textColor="#121212"
-                backgroundColor="#ffffff"
-                titleStyle={{ fontFamily: 'RethinkSans-Regular', fontSize: 14 }}
-                buttonStyle={styles.googleButton}
-              />
             </Card>
           </View>
   
@@ -87,7 +82,7 @@ const RegisterPage = () => {
       shadowOpacity: 100,
       shadowRadius: 20,
       elevation: 20,
-      height: 350,
+      height: 'auto',
       maxWidth: '90%',
       borderRadius: 28,
     },
@@ -102,7 +97,7 @@ const RegisterPage = () => {
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
-      width: 100,
+      width: 300,
       height: 40,
       borderRadius: 28,
       borderWidth: 0,
