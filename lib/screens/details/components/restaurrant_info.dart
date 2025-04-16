@@ -19,7 +19,7 @@ class RestaurantInfo extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineMedium,
             maxLines: 1,
           ),
-          const SizedBox(height: defaultPadding / 2),
+          const SizedBox(height: defaultPadding / 3),
           // แสดงรายละเอียดอื่นๆ
         ],
       ),

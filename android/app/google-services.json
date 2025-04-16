@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "874936241866",
+    "project_id": "dinego-da45b",
+    "storage_bucket": "dinego-da45b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:874936241866:android:52b05262be021a32812e33",
+        "android_client_info": {
+          "package_name": "com.example.nawaproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxZxhTOfnE5_QlWtddDVclBYAHd4TUTJ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

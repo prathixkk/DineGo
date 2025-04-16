@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: defaultPadding * 2),
               SectionTitle(
-                title: "Featured Partners",
+                title: "Most Popular",
                 press:
                     () => Navigator.push(
                       context,

@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:nawaproject/constants.dart';
+import 'package:nawaproject/screens/phoneLogin/number_verify_screen.dart';
 import 'package:nawaproject/screens/home/home_screen.dart';
+import 'package:nawaproject/screens/phoneLogin/phone_login_screen.dart';
 
 import 'firebase_options.dart';
 
@@ -14,10 +16,10 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application. dd
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'The Flutter Way - Foodly UI Kit',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
@@ -40,7 +42,14 @@ class MyApp extends StatelessWidget {
           hintStyle: TextStyle(color: bodyTextColor),
         ),
       ),
-      home: HomeScreen(),
+
+      // ✅ Define routes
+      initialRoute: '/phone',
+      routes: {
+        '/phone': (context) => const MyPhone(), // phone login screen
+        '/verify': (context) => const NumberVerifyScreen(), // otp screen
+        '/home': (context) => const HomeScreen(), // home screen after login
+      },
     );
   }
 }

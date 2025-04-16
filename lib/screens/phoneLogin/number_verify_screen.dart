@@ -1,6 +1,6 @@
+// NumberVerifyScreen.dart
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import '../../components/welcome_text.dart';
 import '../../constants.dart';
 import 'components/otp_form.dart';
@@ -10,9 +10,11 @@ class NumberVerifyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final phoneNumber = ModalRoute.of(context)!.settings.arguments as String;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login to Foodly"),
+        title: const Text("Login to DineGo"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -20,29 +22,24 @@ class NumberVerifyScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const WelcomeText(
+              WelcomeText(
                 title: "Verify phone number",
-                text: "Enter the 4-Digit code sent to you at \n+1501333982",
+                text: "Enter the 4-digit code sent to you at $phoneNumber",
               ),
-
-              // OTP form
               const OtpForm(),
               const SizedBox(height: defaultPadding),
               Center(
                 child: Text.rich(
                   TextSpan(
                     text: "Didn’t receive code? ",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(fontWeight: FontWeight.w500),
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w500),
                     children: <TextSpan>[
                       TextSpan(
                         text: "Resend Again.",
-                        style: const TextStyle(color: primaryColor),
+                        style: const TextStyle(color: Color.fromARGB(255, 255, 161, 11)),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            // Your OTP PIN resend code
+                            // Resend OTP logic here
                           },
                       ),
                     ],

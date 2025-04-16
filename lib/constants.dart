@@ -3,7 +3,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 
 // clolors that we use in our app
 const titleColor = Color(0xFF010F07);
-const primaryColor = Color(0xFFffc8dd);
+const primaryColor = Color.fromARGB(255, 253, 153, 11);
 const accentColor = Color(0xFFcddafd);
 const bodyTextColor = Color(0xFF868686);
 const inputColor = Color(0xFFFBFBFB);

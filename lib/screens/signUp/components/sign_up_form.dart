@@ -88,7 +88,7 @@ class _SignUpFormState extends State<SignUpForm> {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) => const PghoneLoginScreen()),
+                MaterialPageRoute(builder: (_) => const MyPhone()),
               );
             },
             child: const Text("Sign Up"),
