@@ -1,111 +1,100 @@
-// It contains all our demo data that we used
 final List<String> demoRestaurantNames = [
-  "ไก่ทอด หาดหย่าย สูตรเด็ด เจ้าดัง",
-  "บ้านไก่เกาหลี อร่อยกว่าบอนชอน",
-  "ไก่ทอด ลุงพล ป้าแต๋น",
-  "ไก่ทอดร้านนี้ กินแล้วรวย สวยหล่อ",
-  "ไก่ทอดข้างทาง อุุดหนุนป้าหน่อย",
-  "ควยหีแตด"
-  // Add more restaurant names here as needed
+  "Fried Chicken Delight",
+  "Korean Chicken House",
+  "Uncle Phon's Crispy Chicken",
+  "Golden Crispy Chicken",
+  "Auntie's Street Chicken",
 ];
 
 final Map<String, String> restaurantImages = {
-  "ไก่ทอด หาดหย่าย สูตรเด็ด เจ้าดัง": "assets/images/ไก่ทอดซอสหัวหอม.png",
-  "บ้านไก่เกาหลี อร่อยกว่าบอนชอน": "assets/images/ลาบไก่ทอด.jpg",
-  "ไก่ทอด ลุงพล ป้าแต๋น": "assets/images/ปีกไก่ทอด.jpg",
-  "ไก่ทอดร้านนี้ กินแล้วรวย สวยหล่อ": "assets/images/ข้าวเหนียวไก่ทอด.png",
-  "ควยหีแตด": "assets/images/ไก่ทอดหน้าโรงเรียน.jpg"
-  // Add more restaurant names and images here as needed
+  "Fried Chicken Delight": "assets/images/fried_chicken1.png",
+  "Korean Chicken House": "assets/images/korean_chicken.png",
+  "Uncle Phon's Crispy Chicken": "assets/images/uncle_phon_chicken.png",
+  "Golden Crispy Chicken": "assets/images/golden_chicken.png",
+  "Auntie's Street Chicken": "assets/images/street_chicken.png",
 };
 
 List<String> demoBigImages = [
-  "assets/images/ไก่ทอดซอสหัวหอม.png",
-  "assets/images/ลาบไก่ทอด.jpg",
-  "assets/images/ปีกไก่ทอด.jpg",
-  "assets/images/ข้าวเหนียวไก่ทอด.png",
-  "assets/images/ไก่ทอดคลุกซอสเกาหลี.png",
-  "assets/images/ไก่ทอดสับ.jpg",
-  "assets/images/ข้าวเหนียวไก่ทอด.png",
-  "assets/images/ไก่ทอดคาราอาเกะ.jpg",
-  "assets/images/ไก่ทอดบ้านๆ.jpg"
+  "assets/images/fried_chicken1.png",
+  "assets/images/korean_chicken.png",
+  "assets/images/uncle_phon_chicken.png",
+  "assets/images/golden_chicken.png",
+  "assets/images/street_chicken.png",
 ];
 
 List<Map<String, dynamic>> demoMediumCardData = [
   {
-    "name": "บ้านไก่เกาหลี อร่อยกว่าบอนชอน",
-    "image": "assets/images/ไก่ทอดคลุกซอสเกาหลี.png",
-    "location": "อโศก, กรุงเทพ",
+    "name": "Korean Chicken House",
+    "image": "assets/images/korean_chicken.png",
+    "location": "Asoke, Bangkok",
     "rating": 8.6,
     "delivertTime": 20,
   },
   {
-    "name": "ไก่ทอด หาดหย่าย สูตรเด็ด เจ้าดัง",
-    "image": "assets/images/ไก่ทอดหาดใหญ่.png",
-    "location": "นานา, กรุงเทพ",
+    "name": "Fried Chicken Delight",
+    "image": "assets/images/fried_chicken1.png",
+    "location": "Nana, Bangkok",
     "rating": 9.1,
     "delivertTime": 35,
   },
   {
-    "name": "ไก่ทอด ลุงพล ป้าแต๋น",
-    "image": "assets/images/ไก่ทอดซอสน้ำปลา.png",
-    "location": "ชิดลม, กรุงเทพ",
+    "name": "Uncle Phon's Crispy Chicken",
+    "image": "assets/images/uncle_phon_chicken.png",
+    "location": "Chitlom, Bangkok",
     "rating": 7.3,
     "delivertTime": 25,
   },
   {
-    "name": "ไก่ทอดร้านนี้ กินแล้วรวย สวยหล่อ",
-    "image": "assets/images/ข้าวหมกไก่ทอด.png",
-    "location": "ทองหล่อ, กรุงเทพ",
+    "name": "Golden Crispy Chicken",
+    "image": "assets/images/golden_chicken.png",
+    "location": "Thonglor, Bangkok",
     "rating": 8.4,
     "delivertTime": 30,
   },
   {
-    "name": "ไก่ทอดข้างทาง อุุดหนุนป้าหน่อย",
-    "image": "assets/images/ปีกไก่ทอด.png",
-    "location": "มศว, กรุงเทพ",
+    "name": "Auntie's Street Chicken",
+    "image": "assets/images/street_chicken.png",
+    "location": "SWU, Bangkok",
     "rating": 9.5,
     "delivertTime": 15,
-  }
+  },
 ];
 
 final Map<String, List<Map<String, dynamic>>> restaurantMenu = {
-  "บ้านไก่เกาหลี อร่อยกว่าบอนชอน": [
+  "Korean Chicken House": [
     {
-      "name": "ไก่ทอดคลุกซอสเกาหลี",
-      "location": "อโศก, กรุงเทพ",
-      "image": "assets/images/ไก่ทอดคลุกซอสเกาหลี.png",
-      "foodType": "ไก่ทอด",
-      "price": 0,
+      "name": "Spicy Korean Chicken",
+      "location": "Asoke, Bangkok",
+      "image": "assets/images/korean_chicken.png",
+      "foodType": "Fried Chicken",
+      "price": 99,
       "priceRange": "\$ \$",
     },
     {
-      "name": "ข้าวมันไก่",
-      "location": "อโศก, กรุงเทพ",
-      "image": "assets/images/ข้าวหมกไก่ทอด.png",
-      "foodType": "ข้าวมันไก่",
-      "price": 0,
+      "name": "Hainanese Chicken Rice",
+      "location": "Asoke, Bangkok",
+      "image": "assets/images/golden_chicken.png",
+      "foodType": "Rice Dish",
+      "price": 79,
       "priceRange": "\$ \$",
     },
-    // เมนูอาหารอื่นๆ ของร้าน "บ้านไก่เกาหลี อร่อยกว่าบอนชอน" ไปต่อที่นี่
   ],
-  "ไก่ทอด หาดหย่าย สูตรเด็ด เจ้าดัง": [
+  "Fried Chicken Delight": [
     {
-      "name": "ไก่ทอดหาดใหญ่",
-      "location": "นานา, กรุงเทพ",
-      "image": "assets/images/ไก่ทอดหาดใหญ่.png",
-      "foodType": "ไก่ทอด",
-      "price": 0,
+      "name": "Southern Thai Fried Chicken",
+      "location": "Nana, Bangkok",
+      "image": "assets/images/fried_chicken1.png",
+      "foodType": "Fried Chicken",
+      "price": 85,
       "priceRange": "\$ \$",
     },
     {
-      "name": "ข้าวมันไก่",
-      "location": "นานา, กรุงเทพ",
-      "image": "assets/images/ข้าวหมกไก่ทอด.png",
-      "foodType": "ข้าวมันไก่",
-      "price": 0,
+      "name": "Chicken Rice Combo",
+      "location": "Nana, Bangkok",
+      "image": "assets/images/golden_chicken.png",
+      "foodType": "Rice Dish",
+      "price": 70,
       "priceRange": "\$ \$",
     },
-    // เมนูอาหารอื่นๆ ของร้าน "ไก่ทอด หาดหย่าย สูตรเด็ด เจ้าดัง" ไปต่อที่นี่
   ],
-  // เพิ่มร้านอื่นๆ และเมนูอาหารของแต่ละร้านตามต้องการได้ที่นี่
 };
