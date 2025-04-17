@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'components/body.dart';
 
-class FeaturedScreen extends StatelessWidget {
-  const FeaturedScreen({super.key});
+class MostPopularScreen extends StatelessWidget {
+  const MostPopularScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Featured Partners"),
+        title: const Text("Most Popular"),
       ),
       body: const Body(),
     );

@@ -6,22 +6,28 @@ final List<String> demoRestaurantNames = [
   "Auntie's Street Chicken",
 ];
 
+
+//Restaurant Images
 final Map<String, String> restaurantImages = {
-  "Fried Chicken Delight": "assets/images/fried_chicken1.png",
+  "New Shahi Restaurant": "assets/images/fried_chicken1.png",
   "Korean Chicken House": "assets/images/korean_chicken.png",
   "Uncle Phon's Crispy Chicken": "assets/images/uncle_phon_chicken.png",
   "Golden Crispy Chicken": "assets/images/golden_chicken.png",
   "Auntie's Street Chicken": "assets/images/street_chicken.png",
 };
 
+
+//Banner
 List<String> demoBigImages = [
-  "assets/images/fried_chicken1.png",
-  "assets/images/korean_chicken.png",
+  "assets/images/burger slide.png",
+  "assets/images/next slide.png",
   "assets/images/uncle_phon_chicken.png",
   "assets/images/golden_chicken.png",
   "assets/images/street_chicken.png",
 ];
 
+
+//All Restaurant Images
 List<Map<String, dynamic>> demoMediumCardData = [
   {
     "name": "Korean Chicken House",

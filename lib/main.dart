@@ -1,15 +1,29 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:nawaproject/constants.dart';
 import 'package:nawaproject/screens/phoneLogin/number_verify_screen.dart';
 import 'package:nawaproject/screens/home/home_screen.dart';
 import 'package:nawaproject/screens/phoneLogin/phone_login_screen.dart';
+import 'package:nawaproject/screens/signUp/components/sign_up_form.dart';
 
 import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Initialize Firebase
+  try {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
+  } catch (e) {
+    print("Firebase already initialized: $e");
+  }
+
   runApp(const MyApp());
 }
 
@@ -20,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'The Flutter Way - Foodly UI Kit',
+      title: 'DineGo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -43,12 +57,39 @@ class MyApp extends StatelessWidget {
         ),
       ),
 
-      // ✅ Define routes
-      initialRoute: '/phone',
+      // 👇 This decides what screen to show based on login state
+      home: const AuthGate(),
+
+      // Optional named routes if you're using pushNamed
       routes: {
-        '/phone': (context) => const MyPhone(), // phone login screen
-        '/verify': (context) => const NumberVerifyScreen(), // otp screen
-        '/home': (context) => const HomeScreen(), // home screen after login
+        '/phone': (context) => const MyPhone(),
+        '/register': (context) => const SignUpForm(),
+        '/verify': (context) => const NumberVerifyScreen(),
+        '/home': (context) => const HomeScreen(),
+      },
+    );
+  }
+}
+
+class AuthGate extends StatelessWidget {
+  const AuthGate({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (snapshot.hasData) {
+          return const HomeScreen(); // ✅ User is logged in
+        } else {
+          return const MyPhone(); // 🔐 Show login screen
+        }
       },
     );
   }

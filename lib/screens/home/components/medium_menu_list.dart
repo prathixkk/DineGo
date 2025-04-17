@@ -6,14 +6,14 @@ import '../../../constants.dart';
 import '../../../demoData.dart';
 import '../../details/details_screen.dart';
 
-class MediumCardList extends StatefulWidget {
-  const MediumCardList({super.key});
+class MediumMenuList extends StatefulWidget {
+  const MediumMenuList({super.key});
 
   @override
-  _MediumCardListState createState() => _MediumCardListState();
+  _MediumMenuListState createState() => _MediumMenuListState();
 }
 
-class _MediumCardListState extends State<MediumCardList> {
+class _MediumMenuListState extends State<MediumMenuList> {
   bool isLoading = true;
   @override
   void initState() {

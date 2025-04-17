@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nawaproject/constants.dart';
 
 class MyPhone extends StatefulWidget {
   const MyPhone({Key? key}) : super(key: key);
@@ -32,88 +34,215 @@ class _MyPhoneState extends State<MyPhone> {
             alignment: Alignment.center,
             child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Image.asset(
                     'assets/images/Logo.png',
-                    width: 300,
-                    height: 300,
-                  ),
-                  const SizedBox(height: 30),
-                  const Text(
-                    "Phone Verification",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "We need to register your phone before getting started!",
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 30),
-                  Container(
-                    height: 55,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.9),
-                      border: Border.all(width: 1, color: Colors.grey),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 10),
-                        SizedBox(
-                          width: 60,
-                          child: TextField(
-                            controller: countryController,
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        const Text(
-                          "|",
-                          style: TextStyle(fontSize: 33, color: Colors.grey),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: TextField(
-                            controller: phoneController,
-                            keyboardType: TextInputType.phone,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Phone",
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    width: 200,
+                    height: 200,
                   ),
                   const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 45,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromRGBO(254, 174, 0, 1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                  Center(
+                    child: Card(
+                      elevation: 8,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(28),
+                      ),
+                      color: Colors.white.withOpacity(0.9),
+                      child: Padding(
+                        padding: const EdgeInsets.all(30.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              "Login",
+                              style: TextStyle(
+                                fontFamily: 'Righteous',
+                                fontSize: 38,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(255, 160, 59, 1),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            const Text(
+                              "We need to register your phone before getting started!",
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 30),
+                            Container(
+                              height: 55,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(width: 1, color: Colors.grey),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 10),
+                                  SizedBox(
+                                    width: 60,
+                                    child: TextField(
+                                      controller: countryController,
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                  const Text(
+                                    "|",
+                                    style: TextStyle(fontSize: 33, color: Colors.grey),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: TextField(
+                                      controller: phoneController,
+                                      keyboardType: TextInputType.phone,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: "Phone",
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 45,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color.fromRGBO(254, 174, 0, 1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(28),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  String phone = phoneController.text.trim();
+                                  if (phone.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(phone)) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("Please enter a valid number"),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  } else {
+                                    String fullPhone = countryController.text + phone;
+                                    debugPrint("Attempting verification for: $fullPhone");
+
+                                    await FirebaseAuth.instance.verifyPhoneNumber(
+                                      phoneNumber: fullPhone,
+                                      timeout: const Duration(seconds: 60),
+                                      verificationCompleted: (PhoneAuthCredential credential) {
+                                        debugPrint("Auto verification completed");
+                                      },
+                                      verificationFailed: (FirebaseAuthException e) {
+                                        debugPrint("Verification failed: ${e.message}");
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text("Verification failed: ${e.message}"),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                      },
+                                      codeSent: (String verificationId, int? resendToken) {
+                                        debugPrint("Code sent to $fullPhone");
+                                        Navigator.pushNamed(
+                                          context,
+                                          '/verify',
+                                          arguments: {
+                                            'phone': fullPhone,
+                                            'verificationId': verificationId,
+                                          },
+                                        );
+                                      },
+                                      codeAutoRetrievalTimeout: (String verificationId) {
+                                        debugPrint("Auto retrieval timeout");
+                                      },
+                                    );
+                                  }
+                                },
+                                child: const Text(
+                                  "Login with phone",
+                                  style: TextStyle(
+                                    fontFamily: "RethinkSans-Bold",
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 45,
+                              child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  side: const BorderSide(color: Color.fromRGBO(254, 174, 0, 1)),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(28),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/register');
+                                },
+                                child: const Text(
+                                  "Register",
+                                  style: TextStyle(
+                                    fontFamily: "RethinkSans-Bold",
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromRGBO(254, 174, 0, 1),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Row(
+                              children: const [
+                                Expanded(child: Divider(thickness: 1)),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: Text("OR"),
+                                ),
+                                Expanded(child: Divider(thickness: 1)),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 45,
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.black,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(28),
+                                    side: const BorderSide(color: Colors.grey),
+                                  ),
+                                ),
+                                icon: Icon(
+                                   Icons.g_mobiledata,
+                                   size: 28,
+                                   color: Colors.redAccent,
+                                   ),
+                                label: const Text(
+                                  "Sign in with Google",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  // TODO: Add Google Sign-In logic here
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      onPressed: () {
-                        String phone = phoneController.text.trim();// Check if it's exactly 10 digits and all are numeric
-                        if (phone.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(phone)) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Please enter a valid number"),
-                              backgroundColor: Colors.red,
-                              ),
-                              );
-                              } else {
-                                Navigator.pushNamed(context, '/verify', arguments: phone);
-                                }
-                      },
-                      child: const Text("Login with OTP"),
                     ),
                   ),
                 ],

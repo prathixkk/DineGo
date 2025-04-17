@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -11,9 +10,8 @@ import '../../components/section_title.dart';
 import '../../constants.dart';
 import '../../demoData.dart';
 import '../details/details_screen.dart';
-import '../featured/featurred_screen.dart';
-import 'components/medium_card_list.dart';
-import 'components/promotion_banner.dart';
+import '../featured/most_popular.dart';
+import 'components/medium_menu_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String locationStr = "loading...";
+  int _selectedIndex = 0;
 
   _HomeScreenState() {
     requestLocation();
@@ -56,32 +55,50 @@ class _HomeScreenState extends State<HomeScreen> {
     location.onLocationChanged.listen((LocationData currentLocation) async {
       double? lat = currentLocation.latitude;
       double? lon = currentLocation.longitude;
-      if (lon == null) {
-        return;
-      }
+      if (lon == null || lat == null) return;
 
-      if (lat != null && lon != null) {
-        String newLocation = await reverseSearchLocation(lat, lon);
-        setState(() {
-          locationStr = newLocation;
-        });
-      }
+      String newLocation = await reverseSearchLocation(lat, lon);
+      setState(() {
+        locationStr = newLocation;
+      });
     });
   }
 
   Future<String> reverseSearchLocation(double lat, double lon) async {
     http.Response res = await http.get(
-      Uri.parse(
-        "https://nominatim.openstreetmap.org/reverse?lat=$lat&lon=$lon&format=jsonv2&accept-language=th",
-      ),
+      Uri.parse("https://nominatim.openstreetmap.org/reverse?lat=$lat&lon=$lon&format=jsonv2&accept-language=th"),
       headers: {'Accept-Language': 'th'},
     );
     dynamic json = jsonDecode(res.body);
-    print(json);
-    String output =
-        "${json['address']['road']}, ${json['address']['neighbourhood']}, ${json['address']['city']}";
-
+    String output = "${json['address']['road']}, ${json['address']['neighbourhood']}, ${json['address']['city']}";
     return output;
+  }
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        // Home - do nothing
+        break;
+      case 1:
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Search screen not implemented yet")),
+        );
+        break;
+      case 2:
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Orders screen not implemented yet")),
+        );
+        break;
+      case 3:
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Profile screen not implemented yet")),
+        );
+        break;
+    }
   }
 
   @override
@@ -94,102 +111,124 @@ class _HomeScreenState extends State<HomeScreen> {
             borderRadius: BorderRadius.circular(9999.0),
             child: FittedBox(
               fit: BoxFit.cover,
-              child: Image.network(
-                FirebaseAuth.instance.currentUser?.photoURL ??
-                    'https://www.ilovejapantours.com/images/easyblog_articles/6/doraemon-gadget-cat-from-the-future-wallpaper-4.jpg',
-              ),
+              child: Image(
+                image: FirebaseAuth.instance.currentUser?.photoURL != null
+                ? NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!)
+                : AssetImage('assets/images/default_profile.png') as ImageProvider,
+)
+
             ),
           ),
         ),
         title: Column(
           children: [
             Text(
-              "Delivery to".toUpperCase(),
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall!.copyWith(color: primaryColor),
+              "You Are At".toUpperCase(),
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(color: primaryColor),
             ),
             Text(locationStr, style: const TextStyle(color: Colors.black)),
           ],
         ),
       ),
+
+
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              
+              //Banner
               const SizedBox(height: defaultPadding),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                 child: BigCardImageSlide(images: demoBigImages),
               ),
+
+
+              //Most Popular
               const SizedBox(height: defaultPadding * 2),
               SectionTitle(
                 title: "Most Popular",
-                press:
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const FeaturedScreen(),
-                      ),
-                    ),
+                press: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MostPopularScreen()),
+                ),
               ),
               const SizedBox(height: defaultPadding),
-              const MediumCardList(),
+              const MediumMenuList(),
               const SizedBox(height: 20),
-              // Banner
-              // const PromotionBanner(), หน้าโปรโมชั่น
-              const SizedBox(height: 20),
+              
+              //Best Pick
               SectionTitle(
                 title: "Best Pick",
-                press:
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const FeaturedScreen(),
-                      ),
-                    ),
+                press: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MostPopularScreen()),
+                ),
               ),
               const SizedBox(height: 16),
-              const MediumCardList(),
+              const MediumMenuList(),
               const SizedBox(height: 20),
+
+
+              //All Restaurants
               SectionTitle(title: "All Restaurants", press: () {}),
               const SizedBox(height: 16),
-
-              // Demo list of Big Cards
               Column(
-                children:
-                    demoMediumCardData.map((restaurant) {
-                      return Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          defaultPadding,
-                          0,
-                          defaultPadding,
-                          defaultPadding,
-                        ),
-                        child: RestaurantInfoBigCard(
-                          // Use demoBigImages list
-                          images: [restaurant["image"]],
-                          // Use demoRestaurantNames list for name
-                          name: restaurant["name"],
-                          rating: restaurant["rating"],
-                          numOfRating: 200,
-                          deliveryTime: restaurant["delivertTime"],
-                          foodType: const ["Fried Chicken"],
-                          press:
-                              () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const DetailsScreen(),
-                                ),
-                              ),
-                        ),
-                      );
-                    }).toList(),
+                children: demoMediumCardData.map((restaurant) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      defaultPadding,
+                      0,
+                      defaultPadding,
+                      defaultPadding,
+                    ),
+                    child: RestaurantInfoBigCard(
+                      images: [restaurant["image"]],
+                      name: restaurant["name"],
+                      rating: restaurant["rating"],
+                      numOfRating: 200,
+                      deliveryTime: restaurant["delivertTime"],
+                      foodType: const ["Fried Chicken"],
+                      press: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const DetailsScreen()),
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
             ],
           ),
         ),
+      ),
+     
+     
+     //Bottom Navigation Bar
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onTabTapped,
+        selectedItemColor: primaryColor,
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.receipt_long),
+            label: 'Orders',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }

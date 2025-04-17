@@ -12,7 +12,20 @@
           "package_name": "com.example.nawaproject"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "874936241866-1ourdvokjqav2bn21ebg2hf58n163n5b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.nawaproject",
+            "certificate_hash": "648bb72acc34b7258102bcaeab6e86464fc87472"
+          }
+        },
+        {
+          "client_id": "874936241866-6vjhblr7btkjq7j3ev2jpkdeqbt23op5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCxZxhTOfnE5_QlWtddDVclBYAHd4TUTJ0"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "874936241866-6vjhblr7btkjq7j3ev2jpkdeqbt23op5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

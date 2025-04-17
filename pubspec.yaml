@@ -67,6 +67,20 @@ flutter:
     - assets/icons/
     - assets/font/
     - assets/illustrations/
+  
+  fonts:
+  - family: Righteous
+    fonts:
+      - asset: assets/font/Righteous-Regular.ttf
+  - family: RethinkSans-Bold
+    fonts:
+      - asset: assets/font/RethinkSans-Bold.ttf
+  - family: RethinkSans-Regular
+    fonts:
+      - asset: assets/font/RethinkSans-Regular.ttf
+  - family: RethinkSans-Medium
+    fonts:
+      - asset: assets/font/RethinkSans-Medium.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
