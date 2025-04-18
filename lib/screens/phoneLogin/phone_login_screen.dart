@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nawaproject/constants.dart';
 
 class MyPhone extends StatefulWidget {
@@ -17,6 +18,66 @@ class _MyPhoneState extends State<MyPhone> {
   void initState() {
     super.initState();
     countryController.text = "+91";
+  }
+
+  Future<void> startPhoneLogin() async {
+    String phone = phoneController.text.trim();
+    if (phone.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(phone)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please enter a valid number"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    String fullPhone = countryController.text + phone;
+
+    final firestore = FirebaseFirestore.instance;
+    final phoneDoc = await firestore.collection("users").doc(fullPhone).get();
+    if (!phoneDoc.exists) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Phone number not registered"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    debugPrint("Attempting verification for: $fullPhone");
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: fullPhone,
+      timeout: const Duration(seconds: 60),
+      verificationCompleted: (PhoneAuthCredential credential) {
+        debugPrint("Auto verification completed");
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        debugPrint("Verification failed: ${e.message}");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Verification failed: ${e.message}"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        debugPrint("Code sent to $fullPhone");
+        Navigator.pushNamed(
+          context,
+          '/verify',
+          arguments: {
+            'phone': fullPhone,
+            'verificationId': verificationId,
+          },
+        );
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        debugPrint("Auto retrieval timeout");
+      },
+    );
   }
 
   @override
@@ -70,44 +131,7 @@ class _MyPhoneState extends State<MyPhone> {
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 30),
-                            Container(
-                              height: 55,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(width: 1, color: Colors.grey),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                children: [
-                                  const SizedBox(width: 10),
-                                  SizedBox(
-                                    width: 60,
-                                    child: TextField(
-                                      controller: countryController,
-                                      keyboardType: TextInputType.number,
-                                      decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  ),
-                                  const Text(
-                                    "|",
-                                    style: TextStyle(fontSize: 33, color: Colors.grey),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: TextField(
-                                      controller: phoneController,
-                                      keyboardType: TextInputType.phone,
-                                      decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: "Phone",
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            buildPhoneField(),
                             const SizedBox(height: 20),
                             SizedBox(
                               width: double.infinity,
@@ -119,51 +143,7 @@ class _MyPhoneState extends State<MyPhone> {
                                     borderRadius: BorderRadius.circular(28),
                                   ),
                                 ),
-                                onPressed: () async {
-                                  String phone = phoneController.text.trim();
-                                  if (phone.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(phone)) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text("Please enter a valid number"),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                  } else {
-                                    String fullPhone = countryController.text + phone;
-                                    debugPrint("Attempting verification for: $fullPhone");
-
-                                    await FirebaseAuth.instance.verifyPhoneNumber(
-                                      phoneNumber: fullPhone,
-                                      timeout: const Duration(seconds: 60),
-                                      verificationCompleted: (PhoneAuthCredential credential) {
-                                        debugPrint("Auto verification completed");
-                                      },
-                                      verificationFailed: (FirebaseAuthException e) {
-                                        debugPrint("Verification failed: ${e.message}");
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text("Verification failed: ${e.message}"),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                      },
-                                      codeSent: (String verificationId, int? resendToken) {
-                                        debugPrint("Code sent to $fullPhone");
-                                        Navigator.pushNamed(
-                                          context,
-                                          '/verify',
-                                          arguments: {
-                                            'phone': fullPhone,
-                                            'verificationId': verificationId,
-                                          },
-                                        );
-                                      },
-                                      codeAutoRetrievalTimeout: (String verificationId) {
-                                        debugPrint("Auto retrieval timeout");
-                                      },
-                                    );
-                                  }
-                                },
+                                onPressed: startPhoneLogin,
                                 child: const Text(
                                   "Login with phone",
                                   style: TextStyle(
@@ -224,10 +204,10 @@ class _MyPhoneState extends State<MyPhone> {
                                   ),
                                 ),
                                 icon: Icon(
-                                   Icons.g_mobiledata,
-                                   size: 28,
-                                   color: Colors.redAccent,
-                                   ),
+                                  Icons.g_mobiledata,
+                                  size: 28,
+                                  color: Colors.redAccent,
+                                ),
                                 label: const Text(
                                   "Sign in with Google",
                                   style: TextStyle(
@@ -246,6 +226,47 @@ class _MyPhoneState extends State<MyPhone> {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildPhoneField() {
+    return Container(
+      height: 55,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(width: 1, color: Colors.grey),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          const SizedBox(width: 10),
+          SizedBox(
+            width: 60,
+            child: TextField(
+              controller: countryController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          const Text(
+            "|",
+            style: TextStyle(fontSize: 33, color: Colors.grey),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: TextField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: "Phone",
               ),
             ),
           ),

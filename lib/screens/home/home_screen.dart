@@ -9,9 +9,11 @@ import '../../components/cards/big/restaurant_info_big_card.dart';
 import '../../components/section_title.dart';
 import '../../constants.dart';
 import '../../demoData.dart';
+import '../../data/food_data.dart'; // Import food data
 import '../details/details_screen.dart';
 import '../featured/most_popular.dart';
-import 'components/medium_menu_list.dart';
+import '../profile/profile_screen.dart'; // Import the profile screen
+import 'components/food_item_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -81,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     switch (index) {
       case 0:
-        // Home - do nothing
+        // Home - already on this screen, do nothing
         break;
       case 1:
         ScaffoldMessenger.of(context).showSnackBar(
@@ -94,8 +96,10 @@ class _HomeScreenState extends State<HomeScreen> {
         );
         break;
       case 3:
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Profile screen not implemented yet")),
+        // Navigate to the profile screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ProfileScreen()),
         );
         break;
     }
@@ -103,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Rest of your code remains the same
     return Scaffold(
       appBar: AppBar(
         leading: Container(
@@ -115,8 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 image: FirebaseAuth.instance.currentUser?.photoURL != null
                 ? NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!)
                 : AssetImage('assets/images/default_profile.png') as ImageProvider,
-)
-
+              ),
             ),
           ),
         ),
@@ -124,13 +128,13 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Text(
               "You Are At".toUpperCase(),
-              style: Theme.of(context).textTheme.bodySmall!.copyWith(color: primaryColor),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: primaryColor, fontFamily: 'RethinkSans-Bold'),
+              
             ),
-            Text(locationStr, style: const TextStyle(color: Colors.black)),
+            Text(locationStr, style: const TextStyle(color: Colors.black, fontFamily: 'RethinkSans-Regular')),
           ],
         ),
       ),
-
 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -145,34 +149,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: BigCardImageSlide(images: demoBigImages),
               ),
 
-
-              //Most Popular
+              //Most Popular - Now showing food items
               const SizedBox(height: defaultPadding * 2),
               SectionTitle(
-                title: "Most Popular",
+                title: "Most Popular Foods",
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const MostPopularScreen()),
                 ),
               ),
               const SizedBox(height: defaultPadding),
-              const MediumMenuList(),
+              // Using FoodItemList with popular foods
+              FoodItemList(
+                foodItems: foodItems.where((item) => item['isPopular'] == true).toList(),
+              ),
               const SizedBox(height: 20),
               
-              //Best Pick
+              //Best Pick - Now showing food items
               SectionTitle(
-                title: "Best Pick",
+                title: "Best Pick Foods",
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const MostPopularScreen()),
                 ),
               ),
               const SizedBox(height: 16),
-              const MediumMenuList(),
+              // Using FoodItemList with all foods
+              FoodItemList(
+                foodItems: foodItems,
+              ),
               const SizedBox(height: 20),
 
-
-              //All Restaurants
+              //All Restaurants - Keeping this section as is
               SectionTitle(title: "All Restaurants", press: () {}),
               const SizedBox(height: 16),
               Column(
@@ -203,7 +211,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-     
      
      //Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(

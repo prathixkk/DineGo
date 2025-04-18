@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pinput/pinput.dart'; // <- Add this line
 import '../../components/welcome_text.dart';
 import '../../constants.dart';
 
@@ -53,13 +54,40 @@ class _NumberVerifyScreenState extends State<NumberVerifyScreen> {
               title: "Verify phone number",
               text: "Enter the 6-digit code sent to $phone",
             ),
-            TextField(
+            const SizedBox(height: defaultPadding),
+            Pinput(
               controller: otpController,
+              length: 6,
               keyboardType: TextInputType.number,
-              maxLength: 6,
-              decoration: const InputDecoration(
-                hintText: "Enter OTP",
+              defaultPinTheme: PinTheme(
+                width: 50,
+                height: 56,
+                textStyle: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade400),
+                ),
               ),
+              focusedPinTheme: PinTheme(
+                width: 50,
+                height: 56,
+                textStyle: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: primaryColor, width: 2),
+                ),
+              ),
+              onCompleted: (pin) {
+                verifyOtp(verificationId, pin);
+              },
             ),
             const SizedBox(height: defaultPadding),
             SizedBox(

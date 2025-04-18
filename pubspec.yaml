@@ -36,15 +36,17 @@ dependencies:
   cupertino_icons: ^1.0.8
 
 
-  cloud_firestore: ^4.13.0
-  firebase_core: ^2.16.0
+  cloud_firestore: ^5.6.6
+  firebase_core: ^3.13.0
   flutter_svg: ^2.0.7
   form_field_validator: ^1.1.0
-  firebase_auth: ^4.17.8
+  firebase_auth: ^5.5.2
   google_sign_in: ^6.2.1
-  firebase_database: ^10.4.9
-  location: ^6.0.1
+  firebase_database: ^11.3.5
+  location: ^8.0.0
   http: ^1.2.0
+  pinput: ^3.0.1
+
 
 dev_dependencies:
   flutter_test:

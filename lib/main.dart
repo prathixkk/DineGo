@@ -7,6 +7,7 @@ import 'package:nawaproject/screens/phoneLogin/number_verify_screen.dart';
 import 'package:nawaproject/screens/home/home_screen.dart';
 import 'package:nawaproject/screens/phoneLogin/phone_login_screen.dart';
 import 'package:nawaproject/screens/signUp/components/sign_up_form.dart';
+import 'package:nawaproject/screens/signUp/components/email_verification_screen.dart';
 
 import 'firebase_options.dart';
 
@@ -66,6 +67,8 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const SignUpForm(),
         '/verify': (context) => const NumberVerifyScreen(),
         '/home': (context) => const HomeScreen(),
+        '/verifyEmail': (context) => const EmailVerificationScreen(),
+
       },
     );
   }
