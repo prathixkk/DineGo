@@ -5,10 +5,12 @@ import '../../details/food_details_screen.dart';
 
 class FoodItemList extends StatefulWidget {
   final List<Map<String, dynamic>> foodItems;
-  
+  final bool isVertical;
+
   const FoodItemList({
     Key? key,
     required this.foodItems,
+    this.isVertical = false,
   }) : super(key: key);
 
   @override
@@ -33,30 +35,42 @@ class _FoodItemListState extends State<FoodItemList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
+    if (isLoading) return buildLoadingIndicator();
+
+    return widget.isVertical
+        ? SingleChildScrollView(
+          child: Column(
+            children:
+                widget.foodItems.map((item) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: defaultPadding,
+                      vertical: 8,
+                    ),
+                    child: FoodItemCard(foodItem: item, isFullWidth: true),
+                  );
+                }).toList(),
+          ),
+        )
+        : SizedBox(
           width: double.infinity,
-          height: 254,
-          child: isLoading
-              ? buildLoadingIndicator()
-              : ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: widget.foodItems.length,
-                  itemBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.only(
-                      left: defaultPadding,
-                      right: (widget.foodItems.length - 1) == index ? defaultPadding : 0,
-                    ),
-                    child: FoodItemCard(
-                      foodItem: widget.foodItems[index],
-                    ),
+          height: 280,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: widget.foodItems.length,
+            itemBuilder:
+                (context, index) => Padding(
+                  padding: EdgeInsets.only(
+                    left: defaultPadding,
+                    right:
+                        (widget.foodItems.length - 1) == index
+                            ? defaultPadding
+                            : 0,
                   ),
+                  child: FoodItemCard(foodItem: widget.foodItems[index]),
                 ),
-        ),
-      ],
-    );
+          ),
+        );
   }
 
   SingleChildScrollView buildLoadingIndicator() {
@@ -77,10 +91,12 @@ class _FoodItemListState extends State<FoodItemList> {
 
 class FoodItemCard extends StatelessWidget {
   final Map<String, dynamic> foodItem;
+  final bool isFullWidth;
 
   const FoodItemCard({
     Key? key,
     required this.foodItem,
+    this.isFullWidth = false,
   }) : super(key: key);
 
   @override
@@ -95,7 +111,7 @@ class FoodItemCard extends StatelessWidget {
         );
       },
       child: Container(
-        width: 200,
+        width: isFullWidth ? double.infinity : 200,
         height: 254,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -132,37 +148,78 @@ class FoodItemCard extends StatelessWidget {
                 children: [
                   Text(
                     foodItem['name'],
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontFamily: 'Righteous-Regular',
+                      fontWeight: FontWeight.bold,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     "from ${foodItem['restaurant']}",
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: Colors.grey),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  const SizedBox(height: 6),
+
+                  // ➕ Rating and Calories Row
+                  Row(
+                    children: [
+                      Icon(Icons.star, color: Colors.amber, size: 16),
+                      const SizedBox(width: 4),
+                      Text(
+                        foodItem['rating'].toString(),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      const SizedBox(width: 12),
+                      Icon(
+                        Icons.local_fire_department,
+                        color: Colors.redAccent,
+                        size: 16,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        "${foodItem['calories']} kcal",
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+
                   const SizedBox(height: 8),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "₹${foodItem['price']}",
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleMedium?.copyWith(
+                          fontFamily: 'RethinkSans-Bold',
                           color: primaryColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: primaryColor,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Text(
                           "Order",
-                          style: TextStyle(color: Colors.white, fontSize: 12),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'RethinkSans-Regular',
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ],

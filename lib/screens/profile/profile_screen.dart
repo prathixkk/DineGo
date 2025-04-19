@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nawaproject/constants.dart';
 import 'user_info_screen.dart';
 import 'order_history_screen.dart';
@@ -6,6 +8,25 @@ import 'payment_methods_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
+
+  Future<Map<String, dynamic>> _fetchUserData() async {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null) throw Exception("No user signed in");
+
+  // Try fetching from Firestore
+  final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+
+  if (doc.exists && doc.data() != null) {
+    return doc.data()!;
+  }
+
+  // Fallback: Use FirebaseAuth fields
+  return {
+    'name': user.displayName ?? 'User',
+    'email': user.email ?? 'No email',
+    'photoUrl': user.photoURL ?? '',
+  };
+}
 
   @override
   Widget build(BuildContext context) {
@@ -15,48 +36,52 @@ class ProfileScreen extends StatelessWidget {
         title: const Text('My Profile'),
         backgroundColor: primaryColor,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Settings pressed')),
-              );
-            },
-          ),
-        ],
       ),
-      body: Column(
-        children: [
-          _buildProfileHeader(),
-          const SizedBox(height: 20),
-          _buildProfileMenu(context),
-        ],
+      body: FutureBuilder<Map<String, dynamic>?>(
+        future: _fetchUserData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData || snapshot.data == null) {
+            return const Center(child: Text("User data not found"));
+          }
+
+          final userData = snapshot.data!;
+          final name = userData['name'] ?? 'User';
+          final email = userData['email'] ?? 'Email not available';
+
+          return Column(
+            children: [
+              _buildProfileHeader(name, email),
+              const SizedBox(height: 20),
+              _buildProfileMenu(context),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildProfileHeader() {
+  Widget _buildProfileHeader(String name, String email) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 30),
       child: Column(
         children: [
           const CircleAvatar(
-            radius: 60,
+            radius: 50,
             backgroundColor: Colors.white,
-            child: Text(
-              'J',
-              style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold, color: primaryColor),
-            ),
+            child: Icon(Icons.person, size: 50, color: primaryColor),
           ),
           const SizedBox(height: 15),
-          const Text(
-            'John Doe',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          Text(
+            name,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
           ),
-          const Text(
-            'john.doe@example.com',
-            style: TextStyle(fontSize: 16, color: Colors.white70),
+          Text(
+            email,
+            style: const TextStyle(fontSize: 16, color: Colors.black54),
           ),
         ],
       ),
@@ -65,7 +90,7 @@ class ProfileScreen extends StatelessWidget {
 
   Widget _buildProfileMenu(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         children: [
           _buildMenuButton(
@@ -93,10 +118,21 @@ class ProfileScreen extends StatelessWidget {
             context,
             title: 'Sign Out',
             icon: Icons.logout,
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Signed out')),
-              );
+            onTap: () async {
+              try {
+                await FirebaseAuth.instance.signOut();
+                debugPrint('User signed out');
+                if (context.mounted) {
+                  Navigator.pushNamedAndRemoveUntil(context, '/phone', (route) => false);
+                }
+              } catch (e) {
+                debugPrint('Sign out error: $e');
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Failed to sign out.')),
+                  );
+                }
+              }
             },
             color: Colors.red[400],
           ),
@@ -116,9 +152,10 @@ class ProfileScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
       ),
       child: ListTile(
-        leading: Icon(icon, color: color ?? Colors.blue[700]),
+        leading: Icon(icon, color: color ?? primaryColor),
         title: Text(
           title,
           style: TextStyle(fontWeight: FontWeight.w600, color: color ?? Colors.black87),

@@ -83,4 +83,32 @@ final List<Map<String, dynamic>> foodItems = [
     'calories': 420,
     'rating': 4.9,
   },
+  {
+    'name': 'Paneer Tikka',
+    'image': 'assets/images/tikka.png',
+    'price': 200,
+    'restaurant': 'Tandoori House',
+    'description': 'Marinated paneer cubes grilled to perfection, served with mint chutney and onion rings. A popular Indian appetizer that\'s perfect for sharing.',
+    'isPopular': false,
+    'ingredients': [
+      'Paneer',
+      'Yogurt',
+      'Garam masala',
+      'Turmeric',
+      'Red chili powder',
+      'Bell peppers',
+      'Onions'
+    ],
+    'preparationTime': '30 minutes',
+    'calories': 350,
+    'rating': 4.5,
+  },
+];
+
+List<String> demoBigImages = [
+  "assets/images/burger slide.png",
+  "assets/images/next slide.png",
+  "assets/images/uncle_phon_chicken.png",
+  "assets/images/golden_chicken.png",
+  "assets/images/street_chicken.png",
 ];

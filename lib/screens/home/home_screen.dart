@@ -5,12 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 
 import '../../components/cards/big/big_card_image_slide.dart';
-import '../../components/cards/big/restaurant_info_big_card.dart';
 import '../../components/section_title.dart';
 import '../../constants.dart';
-import '../../demoData.dart';
 import '../../data/food_data.dart'; // Import food data
-import '../details/details_screen.dart';
 import '../featured/most_popular.dart';
 import '../profile/profile_screen.dart'; // Import the profile screen
 import 'components/food_item_list.dart';
@@ -181,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 20),
 
               //All Restaurants - Keeping this section as is
-              SectionTitle(title: "All Restaurants", press: () {}),
+              /*SectionTitle(title: "All Restaurants", press: () {}),
               const SizedBox(height: 16),
               Column(
                 children: demoMediumCardData.map((restaurant) {
@@ -206,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 }).toList(),
-              ),
+              ),*/
             ],
           ),
         ),

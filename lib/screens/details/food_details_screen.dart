@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
 
+class CartItem {
+  final Map<String, dynamic> foodItem;
+  int quantity;
+
+  CartItem({required this.foodItem, required this.quantity});
+}
+
+List<CartItem> cart = [];
+
 class FoodDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> foodItem;
 
@@ -16,8 +25,8 @@ class FoodDetailsScreen extends StatefulWidget {
 
 class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
   int quantity = 1;
-  
-  // Demo reviews data - in a real app, this would come from a database
+  bool isAddedToCart = false;
+
   final List<Map<String, dynamic>> reviews = [
     {
       'name': 'John Doe',
@@ -28,14 +37,13 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
     },
     {
       'name': 'Sarah Smith',
-      'avatar': 'assets/images/avatar2.png', 
+      'avatar': 'assets/images/avatar2.png',
       'rating': 5.0,
       'comment': 'Perfect taste and quick delivery!',
       'date': '1 week ago',
     },
   ];
 
-  // Demo ingredients - in a real app, these would be part of the food item data
   final List<String> ingredients = [
     'Fresh vegetables',
     'Spices',
@@ -43,6 +51,34 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
     'Cream',
     'Herbs',
   ];
+
+  void showToast(String message) {
+  final overlay = Overlay.of(context);
+  final overlayEntry = OverlayEntry(
+    builder: (context) => Positioned(
+      top: MediaQuery.of(context).viewPadding.top + 16,
+      left: 20,
+      right: 20,
+      child: Material(
+        elevation: 8,
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.black87,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+          child: Text(
+            message,
+            style: const TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    ),
+  );
+
+  overlay.insert(overlayEntry);
+  Future.delayed(const Duration(seconds: 2), () => overlayEntry.remove());
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +101,6 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Food image
             SizedBox(
               height: 250,
               width: double.infinity,
@@ -74,8 +109,6 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                 fit: BoxFit.cover,
               ),
             ),
-            
-            // Food details
             Padding(
               padding: const EdgeInsets.all(defaultPadding),
               child: Column(
@@ -88,52 +121,44 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                         child: Text(
                           widget.foodItem['name'],
                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ),
                       Text(
                         "₹${widget.foodItem['price'].toStringAsFixed(0)}",
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
-                  
                   const SizedBox(height: 8),
-                  
                   Text(
                     "from ${widget.foodItem['restaurant']}",
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.grey,
-                    ),
+                          color: Colors.grey,
+                        ),
                   ),
-                  
                   const SizedBox(height: 16),
-                  
-                  // Description
                   Text(
                     "Description",
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     widget.foodItem['description'],
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  
                   const SizedBox(height: 24),
-                  
-                  // Ingredients
                   Text(
                     "Ingredients",
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 12),
                   Wrap(
@@ -146,42 +171,31 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                       );
                     }).toList(),
                   ),
-                  
                   const SizedBox(height: 24),
-                  
-                  // Reviews
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Reviews",
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                       TextButton(
-                        onPressed: () {
-                          // Show all reviews
-                        },
+                        onPressed: () {},
                         child: const Text("See all"),
                       ),
                     ],
                   ),
-                  
                   const SizedBox(height: 8),
-                  
-                  // Review list
                   ...reviews.map((review) => _buildReviewItem(review)).toList(),
-                  
-                  const SizedBox(height: 100), // Space for the bottom button
+                  const SizedBox(height: 100),
                 ],
               ),
             ),
           ],
         ),
       ),
-      
-      // Add to cart bottom bar
       bottomSheet: Container(
         padding: const EdgeInsets.all(defaultPadding),
         decoration: BoxDecoration(
@@ -196,7 +210,6 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
         ),
         child: Row(
           children: [
-            // Quantity selector
             Container(
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey.shade300),
@@ -210,6 +223,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                       if (quantity > 1) {
                         setState(() {
                           quantity--;
+                          isAddedToCart = false;
                         });
                       }
                     },
@@ -223,27 +237,35 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                     onPressed: () {
                       setState(() {
                         quantity++;
+                        isAddedToCart = false;
                       });
                     },
                   ),
                 ],
               ),
             ),
-            
             const SizedBox(width: 16),
-            
-            // Add to cart button
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  // Add to cart logic
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("${quantity}x ${widget.foodItem['name']} added to cart"),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                },
+                  if (isAddedToCart) {
+                    Navigator.pushNamed(context, '/cart');
+                    } else {
+                      final existingIndex = cart.indexWhere(
+                        (item) => item.foodItem['id'] == widget.foodItem['id'],
+                        );
+                        if (existingIndex != -1) {
+                          cart[existingIndex].quantity += quantity;
+                          } else {
+                            cart.add(CartItem(foodItem: widget.foodItem, quantity: quantity));
+                            }
+                            setState(() {
+                              isAddedToCart = true;
+
+                              showToast("$quantity x ${widget.foodItem['name']} added to cart");
+                              });
+  }
+},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -252,7 +274,9 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                   ),
                 ),
                 child: Text(
-                  "Add to Cart - ₹${(widget.foodItem['price'] * quantity).toStringAsFixed(0)}",
+                  isAddedToCart
+                      ? "Show Cart"
+                      : "Add to Cart - ₹${(widget.foodItem['price'] * quantity).toStringAsFixed(0)}",
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -265,22 +289,18 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
       ),
     );
   }
-  
+
   Widget _buildReviewItem(Map<String, dynamic> review) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Avatar
           CircleAvatar(
             backgroundImage: AssetImage(review['avatar']),
             radius: 20,
           ),
-          
           const SizedBox(width: 12),
-          
-          // Review content
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,17 +323,14 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                     ),
                   ],
                 ),
-                
                 const SizedBox(height: 4),
-                
-                // Rating
                 Row(
                   children: [
                     ...List.generate(5, (index) {
                       return Icon(
-                        index < review['rating'].floor() 
-                            ? Icons.star 
-                            : index < review['rating'] 
+                        index < review['rating'].floor()
+                            ? Icons.star
+                            : index < review['rating']
                                 ? Icons.star_half
                                 : Icons.star_border,
                         color: Colors.amber,
@@ -330,10 +347,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                     ),
                   ],
                 ),
-                
                 const SizedBox(height: 4),
-                
-                // Comment
                 Text(review['comment']),
               ],
             ),

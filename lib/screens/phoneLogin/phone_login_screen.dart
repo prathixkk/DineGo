@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nawaproject/constants.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class MyPhone extends StatefulWidget {
   const MyPhone({Key? key}) : super(key: key);
@@ -201,25 +202,58 @@ class _MyPhoneState extends State<MyPhone> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(28),
                                     side: const BorderSide(color: Colors.grey),
-                                  ),
+                                    ),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.g_mobiledata,
+                                      size: 28,
+                                      color: Colors.redAccent,
+                                      ),
+                                      label: const Text(
+                                        "Sign in with Google",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,),
+                                          ),
+                                          onPressed: () async {
+                                            try {
+                                              final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+                                              if (googleUser == null) return; // User cancelled sign-in
+                                              final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+                                              final credential = GoogleAuthProvider.credential(
+                                                accessToken: googleAuth.accessToken,
+                                                idToken: googleAuth.idToken,
+                                                );
+                                                
+                                                final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+                                                
+                                                // Optionally create/update user in Firestore 
+                                                final user = userCredential.user;
+                                                if (user != null) {
+                                                  final firestore = FirebaseFirestore.instance;
+                                                  await firestore.collection("users").doc(user.uid).set({
+                                                    'name': user.displayName ?? '',
+                                                    'email': user.email ?? '',
+                                                    'photoUrl': user.photoURL ?? '',
+                                                    'uid': user.uid,
+                                                    'provider': 'google',
+                                                    'createdAt': DateTime.now().toIso8601String(),
+                                                    }, SetOptions(merge: true));
+                                                    if (context.mounted) {
+                                                      Navigator.pushReplacementNamed(context, '/home');
+                                                      }
+                                                  }
+                                              } catch (e) {
+                                                        debugPrint("Google Sign-In Error: $e");
+                                                        if (context.mounted) {
+                                                          ScaffoldMessenger.of(context).showSnackBar(
+                                                            SnackBar(content: Text("Google sign-in failed: $e")),
+                                                            );
+                                                         }
+                                                        }
+                                            },
                                 ),
-                                icon: Icon(
-                                  Icons.g_mobiledata,
-                                  size: 28,
-                                  color: Colors.redAccent,
-                                ),
-                                label: const Text(
-                                  "Sign in with Google",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  // TODO: Add Google Sign-In logic here
-                                },
-                              ),
-                            ),
+                              )
                           ],
                         ),
                       ),

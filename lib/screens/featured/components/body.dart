@@ -1,64 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:nawaproject/screens/details/details_screen.dart';
-import '../../../components/cards/big/restaurant_info_big_card.dart';
-import '../../../components/scalton/big_card_scalton.dart';
-import '../../../constants.dart';
+import '../../../data/food_data.dart'; // Adjust path if needed
+import '../../home/components/food_item_list.dart'; // Adjust path if needed
 
-import '../../../demoData.dart';
-
-class Body extends StatefulWidget {
+class Body extends StatelessWidget {
   const Body({super.key});
 
   @override
-  _BodyState createState() => _BodyState();
-}
-
-class _BodyState extends State<Body> {
-  bool isLoading = true;
-  int demoDataLength = 4;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        isLoading = false;
-      });
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-        child: ListView.builder(
-          itemCount: isLoading ? 3 : demoDataLength,
-          itemBuilder:
-              (context, index) => Padding(
-                padding: const EdgeInsets.only(bottom: defaultPadding),
-                child:
-                    isLoading
-                        ? const BigCardScalton()
-                        : RestaurantInfoBigCard(
-                          images: demoBigImages..shuffle(),
-                          name: demoMediumCardData[index]["name"],
-                          rating: demoMediumCardData[index]["rating"],
-                          numOfRating: demoMediumCardData[index]["numOfRating"],
-                          deliveryTime:
-                              demoMediumCardData[index]["deliveryTime"],
-                          foodType: demoMediumCardData[index]["foodType"],
-                          press: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const DetailsScreen(),
-                              ),
-                            );
-                          },
-                        ),
-              ),
-        ),
+    final popularFoodItems = foodItems.where((item) => item['isPopular'] == true).toList();
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Most Popular",
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          const SizedBox(height: 16),
+          FoodItemList(
+            foodItems: popularFoodItems,
+            isVertical: true,
+          ),
+        ],
       ),
     );
   }

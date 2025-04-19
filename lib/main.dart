@@ -8,7 +8,7 @@ import 'package:nawaproject/screens/home/home_screen.dart';
 import 'package:nawaproject/screens/phoneLogin/phone_login_screen.dart';
 import 'package:nawaproject/screens/signUp/components/sign_up_form.dart';
 import 'package:nawaproject/screens/signUp/components/email_verification_screen.dart';
-
+import 'package:nawaproject/screens/CartScreen/cart_screen.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -63,6 +63,7 @@ class MyApp extends StatelessWidget {
 
       // Optional named routes if you're using pushNamed
       routes: {
+        '/cart': (context) => const CartScreen(),
         '/phone': (context) => const MyPhone(),
         '/register': (context) => const SignUpForm(),
         '/verify': (context) => const NumberVerifyScreen(),
