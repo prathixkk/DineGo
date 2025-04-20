@@ -29,9 +29,8 @@ final InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
   border: kDefaultOutlineInputBorder,
   enabledBorder: kDefaultOutlineInputBorder,
   focusedBorder: kDefaultOutlineInputBorder.copyWith(
-      borderSide: BorderSide(
-    color: primaryColor.withOpacity(0.5),
-  )),
+    borderSide: BorderSide(color: primaryColor.withOpacity(0.5)),
+  ),
   errorBorder: kDefaultOutlineInputBorder.copyWith(
     borderSide: kErrorBorderSide,
   ),
@@ -42,5 +41,6 @@ final InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
 
 const ButtonThemeData buttonThemeData = ButtonThemeData(
   shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(8))),
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+  ),
 );

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants.dart';
 import '../../../components/scalton/medium_card_scalton.dart';
 import '../../details/food_details_screen.dart';
+import '../../../data/food_data.dart';
 
 class FoodItemList extends StatefulWidget {
-  final List<Map<String, dynamic>> foodItems;
   final bool isVertical;
+  final String? restaurantId;
 
-  const FoodItemList({
-    Key? key,
-    required this.foodItems,
-    this.isVertical = false,
-  }) : super(key: key);
+  const FoodItemList({Key? key, this.isVertical = false, this.restaurantId})
+    : super(key: key);
 
   @override
   _FoodItemListState createState() => _FoodItemListState();
@@ -19,55 +18,100 @@ class FoodItemList extends StatefulWidget {
 
 class _FoodItemListState extends State<FoodItemList> {
   bool isLoading = true;
+  List<Map<String, dynamic>> foodItems = [];
 
   @override
   void initState() {
     super.initState();
-    // Simulate loading delay
-    Future.delayed(const Duration(seconds: 1), () {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    });
+    _loadRestaurantMenu();
+  }
+
+  Future<void> _loadRestaurantMenu() async {
+    String? restaurantId = widget.restaurantId;
+
+    if (restaurantId == null) {
+      final prefs = await SharedPreferences.getInstance();
+      restaurantId = prefs.getString('selected_restaurant_id');
+    }
+
+    if (restaurantId != null && restaurantMenus.containsKey(restaurantId)) {
+      setState(() {
+        foodItems =
+            List<Map<String, dynamic>>.from(
+              restaurantMenus[restaurantId]!['menu'],
+            ).map((item) {
+              return {
+                ...item,
+                'restaurant': restaurantMenus[restaurantId]!['restaurant'],
+              };
+            }).toList();
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        foodItems = [];
+        isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) return buildLoadingIndicator();
 
-    return widget.isVertical
-        ? SingleChildScrollView(
+    if (foodItems.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(defaultPadding),
           child: Column(
-            children:
-                widget.foodItems.map((item) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: defaultPadding,
-                      vertical: 8,
-                    ),
-                    child: FoodItemCard(foodItem: item, isFullWidth: true),
-                  );
-                }).toList(),
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.no_food, size: 64, color: Colors.grey),
+              const SizedBox(height: 16),
+              Text(
+                "No food items available for this restaurant",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/qr_scanner');
+                },
+                child: const Text("Scan Another Restaurant"),
+              ),
+            ],
           ),
+        ),
+      );
+    }
+
+    return widget.isVertical
+        ? Column(
+          children:
+              foodItems.map((item) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: defaultPadding,
+                    vertical: 8,
+                  ),
+                  child: FoodItemCard(foodItem: item, isFullWidth: true),
+                );
+              }).toList(),
         )
         : SizedBox(
           width: double.infinity,
           height: 280,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: widget.foodItems.length,
+            itemCount: foodItems.length,
             itemBuilder:
                 (context, index) => Padding(
                   padding: EdgeInsets.only(
                     left: defaultPadding,
-                    right:
-                        (widget.foodItems.length - 1) == index
-                            ? defaultPadding
-                            : 0,
+                    right: index == foodItems.length - 1 ? defaultPadding : 0,
                   ),
-                  child: FoodItemCard(foodItem: widget.foodItems[index]),
+                  child: FoodItemCard(foodItem: foodItems[index]),
                 ),
           ),
         );
@@ -112,7 +156,6 @@ class FoodItemCard extends StatelessWidget {
       },
       child: Container(
         width: isFullWidth ? double.infinity : 200,
-        height: 254,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -125,9 +168,9 @@ class FoodItemCard extends StatelessWidget {
           ],
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min, // Dynamically wraps content
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Food image
             ClipRRect(
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16),
@@ -140,7 +183,6 @@ class FoodItemCard extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            // Food details
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
@@ -165,32 +207,28 @@ class FoodItemCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 6),
-
-                  // ➕ Rating and Calories Row
                   Row(
                     children: [
-                      Icon(Icons.star, color: Colors.amber, size: 16),
+                      const Icon(Icons.star, color: Colors.amber, size: 16),
                       const SizedBox(width: 4),
                       Text(
                         foodItem['rating'].toString(),
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       const SizedBox(width: 12),
-                      Icon(
+                      const Icon(
                         Icons.local_fire_department,
                         color: Colors.redAccent,
                         size: 16,
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        "${foodItem['calories']} kcal",
+                        "${foodItem['calories']['total']} kcal",
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 8),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

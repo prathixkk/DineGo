@@ -6,6 +6,7 @@ import 'package:nawaproject/constants.dart';
 import 'package:nawaproject/screens/phoneLogin/number_verify_screen.dart';
 import 'package:nawaproject/screens/home/home_screen.dart';
 import 'package:nawaproject/screens/phoneLogin/phone_login_screen.dart';
+import 'package:nawaproject/screens/qrScanner/qr_scanner_screen.dart';
 import 'package:nawaproject/screens/signUp/components/sign_up_form.dart';
 import 'package:nawaproject/screens/signUp/components/email_verification_screen.dart';
 import 'package:nawaproject/screens/CartScreen/cart_screen.dart';
@@ -67,9 +68,9 @@ class MyApp extends StatelessWidget {
         '/phone': (context) => const MyPhone(),
         '/register': (context) => const SignUpForm(),
         '/verify': (context) => const NumberVerifyScreen(),
+        '/qrScanner': (context) => QRScannerScreen(), // Add QR scanner route
         '/home': (context) => const HomeScreen(),
         '/verifyEmail': (context) => const EmailVerificationScreen(),
-
       },
     );
   }
@@ -90,7 +91,8 @@ class AuthGate extends StatelessWidget {
         }
 
         if (snapshot.hasData) {
-          return const HomeScreen(); // ✅ User is logged in
+          // Changed this to go to QR scanner instead of home
+          return QRScannerScreen();
         } else {
           return const MyPhone(); // 🔐 Show login screen
         }
