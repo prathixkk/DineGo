@@ -50,6 +50,8 @@ dependencies:
   url_launcher: ^6.3.1
   shared_preferences: ^2.5.3
   mobile_scanner: ^6.0.8
+  uuid: ^4.5.1
+  upi_pay: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +64,11 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/dinego.png"
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -72,6 +79,7 @@ flutter:
     - assets/icons/
     - assets/font/
     - assets/illustrations/
+    - assets/payment/  # The directory containing the payment_info.dart
 
   fonts:
     - family: Righteous
