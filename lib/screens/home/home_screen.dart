@@ -1,3 +1,4 @@
+// home_screen.dart
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,8 @@ import '../featured/most_popular.dart';
 import '../profile/profile_screen.dart';
 import 'components/food_item_list.dart';
 import '../QrScanner/qr_scanner_screen.dart';
+import 'search/search_screen.dart'; // ✅ NEW IMPORT
 
-// Demo images (or import from food_data if centralized)
 const List<String> demoBigImages = [
   "assets/images/burger slide.png",
   "assets/images/next slide.png",
@@ -122,22 +123,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
     switch (index) {
       case 0:
-        // Home - do nothing
         break;
       case 1:
-        // Search (to be implemented)
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Search screen not implemented yet")),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => SearchScreen(restaurantId: _restaurantId),
+          ),
         );
         break;
       case 2:
-        // Orders
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Orders screen not implemented yet")),
         );
         break;
       case 3:
-        // Profile
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const ProfileScreen()),
@@ -198,7 +198,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -211,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: defaultPadding * 2),
               SectionTitle(
-                title: "Menu",
+                title: "Most Popular",
                 press:
                     () => Navigator.push(
                       context,
@@ -224,7 +223,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
               ),
               const SizedBox(height: defaultPadding),
-              FoodItemList(isVertical: false, restaurantId: _restaurantId),
+              FoodItemList(
+                isVertical: false,
+                restaurantId: _restaurantId,
+                filterPopular: true,
+              ),
               const SizedBox(height: 20),
               SectionTitle(
                 title: "All Menu Items",
@@ -240,13 +243,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
               ),
               const SizedBox(height: 16),
-              FoodItemList(isVertical: true, restaurantId: _restaurantId),
+              FoodItemList(
+                isVertical: true,
+                restaurantId: _restaurantId,
+                filterPopular: false,
+              ),
               const SizedBox(height: 39),
             ],
           ),
         ),
       ),
-
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onTabTapped,
@@ -254,10 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ), // ✅ NEW
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt_long),
             label: 'Orders',

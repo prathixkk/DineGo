@@ -1,4 +1,3 @@
-// food_item_list.dart (updated to include restaurantId)
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants.dart';
@@ -9,9 +8,14 @@ import '../../../data/food_data.dart';
 class FoodItemList extends StatefulWidget {
   final bool isVertical;
   final String? restaurantId;
+  final bool filterPopular;
 
-  const FoodItemList({Key? key, this.isVertical = false, this.restaurantId})
-      : super(key: key);
+  const FoodItemList({
+    Key? key,
+    this.isVertical = false,
+    this.restaurantId,
+    this.filterPopular = false,
+  }) : super(key: key);
 
   @override
   _FoodItemListState createState() => _FoodItemListState();
@@ -36,16 +40,24 @@ class _FoodItemListState extends State<FoodItemList> {
     }
 
     if (restaurantId != null && restaurantMenus.containsKey(restaurantId)) {
+      List<Map<String, dynamic>> menuItems = List<Map<String, dynamic>>.from(
+        restaurantMenus[restaurantId]!['menu'],
+      );
+
+      if (widget.filterPopular) {
+        menuItems =
+            menuItems.where((item) => item['isPopular'] == true).toList();
+      }
+
       setState(() {
-        foodItems = List<Map<String, dynamic>>.from(
-          restaurantMenus[restaurantId]!['menu'],
-        ).map((item) {
-          return {
-            ...item,
-            'restaurant': restaurantMenus[restaurantId]!['restaurant'],
-            'restaurantId': restaurantId, // ✅ Add restaurantId to each food item
-          };
-        }).toList();
+        foodItems =
+            menuItems.map((item) {
+              return {
+                ...item,
+                'restaurant': restaurantMenus[restaurantId]!['restaurant'],
+                'restaurantId': restaurantId,
+              };
+            }).toList();
         isLoading = false;
       });
     } else {
@@ -89,31 +101,33 @@ class _FoodItemListState extends State<FoodItemList> {
 
     return widget.isVertical
         ? Column(
-            children: foodItems.map((item) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: defaultPadding,
-                  vertical: 8,
-                ),
-                child: FoodItemCard(foodItem: item, isFullWidth: true),
-              );
-            }).toList(),
-          )
+          children:
+              foodItems.map((item) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: defaultPadding,
+                    vertical: 8,
+                  ),
+                  child: FoodItemCard(foodItem: item, isFullWidth: true),
+                );
+              }).toList(),
+        )
         : SizedBox(
-            width: double.infinity,
-            height: 280,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: foodItems.length,
-              itemBuilder: (context, index) => Padding(
-                padding: EdgeInsets.only(
-                  left: defaultPadding,
-                  right: index == foodItems.length - 1 ? defaultPadding : 0,
+          width: double.infinity,
+          height: 280,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: foodItems.length,
+            itemBuilder:
+                (context, index) => Padding(
+                  padding: EdgeInsets.only(
+                    left: defaultPadding,
+                    right: index == foodItems.length - 1 ? defaultPadding : 0,
+                  ),
+                  child: FoodItemCard(foodItem: foodItems[index]),
                 ),
-                child: FoodItemCard(foodItem: foodItems[index]),
-              ),
-            ),
-          );
+          ),
+        );
   }
 
   SingleChildScrollView buildLoadingIndicator() {
@@ -190,19 +204,18 @@ class FoodItemCard extends StatelessWidget {
                   Text(
                     foodItem['name'],
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontFamily: 'Righteous-Regular',
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontFamily: 'Righteous-Regular',
+                      fontWeight: FontWeight.bold,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     "from ${foodItem['restaurant']}",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(color: Colors.grey),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: Colors.grey),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -234,11 +247,13 @@ class FoodItemCard extends StatelessWidget {
                     children: [
                       Text(
                         "₹${foodItem['price']}",
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontFamily: 'RethinkSans-Bold',
-                              color: primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleMedium?.copyWith(
+                          fontFamily: 'RethinkSans-Bold',
+                          color: primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
