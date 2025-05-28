@@ -67,7 +67,8 @@ class MyApp extends StatelessWidget {
           hintStyle: TextStyle(color: bodyTextColor),
         ),
       ),
-      home: const AuthGate(),
+      // home: const AuthGate(),
+      home: MyPhone(),
       routes: {
         '/cart': (context) => const CartScreen(),
         '/phone': (context) => const MyPhone(),

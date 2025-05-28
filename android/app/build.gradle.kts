@@ -9,7 +9,7 @@ dependencies {
 
   // Import the Firebase BoM
 
-  implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
+  implementation(platform("com.google.firebase:firebase-bom:33.14.0"))
 
 
   // TODO: Add the dependencies for Firebase products you want to use
@@ -27,7 +27,7 @@ dependencies {
 
 
 android {
-    namespace = "com.example.nawaproject"
+    namespace = "com.example.dinego"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 
@@ -42,7 +42,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.nawaproject"
+        applicationId = "com.example.dinego"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 23

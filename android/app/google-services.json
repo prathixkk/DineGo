@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:874936241866:android:52b05262be021a32812e33",
+        "mobilesdk_app_id": "1:874936241866:android:1ef9631806760c6d812e33",
         "android_client_info": {
-          "package_name": "com.example.nawaproject"
+          "package_name": "com.example.dinego"
         }
       },
       "oauth_client": [
         {
-          "client_id": "874936241866-1ourdvokjqav2bn21ebg2hf58n163n5b.apps.googleusercontent.com",
+          "client_id": "874936241866-nuh2mn80fjh0bue8l9qahp57om2vb1dp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.nawaproject",
-            "certificate_hash": "648bb72acc34b7258102bcaeab6e86464fc87472"
+            "package_name": "com.example.dinego",
+            "certificate_hash": "59270e3f4c0940e59ab62048b0bb6bee855f5101"
           }
         },
         {

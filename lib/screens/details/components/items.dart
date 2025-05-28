@@ -1,17 +1,16 @@
-// iteams.dart
+
 import 'package:flutter/material.dart';
-import 'package:nawaproject/components/cards/iteam_card.dart';
-import 'package:nawaproject/constants.dart';
-import 'components/item_card.dart'; // import ItemCard
+import 'package:dinego/components/cards/iteam_card.dart';
+import 'package:dinego/constants.dart';
 
 class Items extends StatelessWidget {
   const Items({
     super.key,
     required this.demoData,
-  }); // Add required parameter demoData
+  }); 
 
   final List<Map<String, dynamic>>
-  demoData; // Add demoData as a required parameter
+  demoData;
 
   @override
   Widget build(BuildContext context) {

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:nawaproject/constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class MyPhone extends StatefulWidget {
-  const MyPhone({Key? key}) : super(key: key);
+class PhoneInput extends StatefulWidget {
+  const PhoneInput({Key? key}) : super(key: key);
 
   @override
-  State<MyPhone> createState() => _MyPhoneState();
+  State<PhoneInput> createState() => _MyPhoneState();
 }
 
-class _MyPhoneState extends State<MyPhone> {
+class _MyPhoneState extends State<PhoneInput> {
   TextEditingController countryController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
@@ -204,10 +203,10 @@ class _MyPhoneState extends State<MyPhone> {
                                     side: const BorderSide(color: Colors.grey),
                                     ),
                                     ),
-                                    icon: const Icon(
-                                      Icons.g_mobiledata,
-                                      size: 28,
-                                      color: Colors.redAccent,
+                                    icon: Image.asset(
+                                      'assets/icons/google_logo.png',
+                                      width: 23,
+                                      height: 23,
                                       ),
                                       label: const Text(
                                         "Sign in with Google",
