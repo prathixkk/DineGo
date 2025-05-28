@@ -1,6 +1,3 @@
-# DineGo
-
-A new Flutter project.
 ![Dinego-Recovered](https://github.com/user-attachments/assets/419aeda1-22d4-4b64-8c47-1d51dee4ab11)
 
 ## Getting Started
