@@ -1,5 +1,5 @@
 ![Dinego-Recovered](https://github.com/user-attachments/assets/419aeda1-22d4-4b64-8c47-1d51dee4ab11)
-
+![Dinego-Login-Register](https://github.com/prathixkk/DineGo/blob/main/Login%20Registeration.png)
 ## Getting Started
 
 This project is a starting point for a Flutter application.
